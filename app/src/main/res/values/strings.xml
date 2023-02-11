@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Spin To Win 2048</string>
-    <string name="score">Score: 0</string>
+    <string name="score">Score: </string>
 </resources>

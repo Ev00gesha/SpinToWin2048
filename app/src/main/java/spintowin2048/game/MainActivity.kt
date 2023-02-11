@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         manager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        cellAnimation = AnimationUtils.loadAnimation(this, R.anim.cell_animation)
+        cellAnimation = AnimationUtils.loadAnimation(this, R.anim.test_anim)
         config = Config()
 
         setContentView(binding.root)
@@ -55,6 +55,10 @@ class MainActivity : AppCompatActivity() {
         addNumbers()
         showBoard()
         sensorListener()
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
     private fun initBoard(){
@@ -126,6 +130,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkWin():Boolean{
+        for (i in 0 until size) {
+            for (j in 0 until size) {
+                if(board[i][j].point == 2048)
+                    return true
+            }
+        }
+        return false
+    }
+
     private fun moveCell(direction: String){
         val beforeMerge = Array(size) { ArrayList<CellState>(size)}
         copyMatrix(beforeMerge)
@@ -155,6 +169,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        if(checkWin())
+            showToast("Поздравляю вы собрали ячейку с 2048")
         if(!beforeMerge.contentDeepEquals(board))
             addNumbers()
         showBoard()
@@ -243,7 +259,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showBoard(){
         binding.board.removeAllViews()
-        binding.gameScore.text = "Score: $score"
+        binding.gameScore.text = getString(R.string.score) + score.toString()
         for(i in 0 until size){
             for(j in 0 until size){
                 val view = inflater.inflate(R.layout.cell, null)
